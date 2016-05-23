@@ -3,41 +3,55 @@ class RpnCalculate {
 	//разделитель элементов в строке
 	var $separator = " "; 
 	//математические операции. Для добавления операции добавить запись в этот массив по примеру.
-	var $operations = [
-						'+' => '$a + $b', 
-						'-' => '$a - $b', 
-						'*' => '$a * $b', 
-						'/' => '$a / $b', 
-						'^' => 'pow($a, $b)'];
+	var $operations = ['+',	'-', '*', '/', '^'];
 
 	private function strToArray($str){
+		//удаляем лишние пробелы
+		$str = rtrim($str);
+		$str = ltrim($str);
+		$str = preg_replace('# {2,}#',' ',$str);
 		$array = explode($this->separator, $str);
+		var_dump($array);
 		return $array;
 	}
-	private function calculate($a, $b, $instruction)
-	{
-		$string = '$rezult=' . $instruction . ';';
-		eval($string);
+	private function calculate($a, $b, $instruction){
+		switch ($instruction) {
+			case '+':
+				$rezult = $a + $b;
+				break;
+			case '-':
+				$rezult = $a - $b;
+				break;
+			case '*':
+				$rezult = $a * $b;
+				break;
+			case '/':
+				$rezult = $a / $b;
+				break;
+			case '^':
+				$rezult = pow($a, $b);
+				break;
+		}
 		return $rezult;
 	}
 	public function calculating($str){
 		$array = $this->strToArray($str);
 		$stack = [];
 		foreach ($array as $token) {
-			if (array_key_exists($token, $this->operations)) {
+			if (in_array($token, $this->operations)) {
 				if (count($stack) < 2) {
 					throw new Exeption("Недостаточно данных для операции '$token'");
 				}
 				$b = array_pop($stack);
 				$a = array_pop($stack);
-				$rezult = $this->calculate($a, $b, $this->operations[$token]);
+				$rezult = $this->calculate($a, $b, $token);
 				array_push($stack, $rezult);
 			}
 			elseif (is_numeric($token)) {
 				array_push($stack, $token);
 			}
 			else {
-				throw new Exception("Недопустимый символ: $token");
+				throw new Exception("Недопустимый символ: \"$token\"");
 			}
 		}
 		if (count($stack) > 1) {
