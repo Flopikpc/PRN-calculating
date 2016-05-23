@@ -6,6 +6,18 @@
 	padding: 50px 60px;
 	box-sizing: border-box;
 }
+.wrapper > p{
+	font-family: arial, sans-serif;
+	font-style: italic;
+	font-size: 17px;
+	text-align: center;
+	background: #bd362f;
+	color: #fff;
+	border: 1px solid red;
+	border-radius: 10px;
+	padding: 10px 0px;
+	margin-bottom: 10px;
+}
 form {
 	margin-bottom: 10px;
 }
