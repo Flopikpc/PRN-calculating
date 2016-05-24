@@ -11,7 +11,6 @@ class RpnCalculate {
 		$str = ltrim($str);
 		$str = preg_replace('# {2,}#',' ',$str);
 		$array = explode($this->separator, $str);
-		var_dump($array);
 		return $array;
 	}
 	private function calculate($a, $b, $instruction){
@@ -26,6 +25,9 @@ class RpnCalculate {
 				$rezult = $a * $b;
 				break;
 			case '/':
+				if ($b == 0) {
+					throw new Exception("Деление на ноль");
+				}
 				$rezult = $a / $b;
 				break;
 			case '^':
@@ -40,7 +42,7 @@ class RpnCalculate {
 		foreach ($array as $token) {
 			if (in_array($token, $this->operations)) {
 				if (count($stack) < 2) {
-					throw new Exeption("Недостаточно данных для операции '$token'");
+					throw new Exception("Недостаточно данных для операции '$token'");
 				}
 				$b = array_pop($stack);
 				$a = array_pop($stack);
